@@ -65,10 +65,15 @@ for (var i = 0; i < BATCH_SIZE; ++i)
 
 if (TEST_ANIMATIONS)
 {
-	character = new BBMOD_Model("Brute.bbmod");
-	anim_idle = new BBMOD_Animation("Idle.bbanim");
+	character = new BBMOD_Model("Assets/Brute/Brute.bbmod");
+
+	anim_idle = new BBMOD_Animation("Assets/Brute/Idle.bbanim");
 	anim_idle.TransitionIn = 0;
-	anim_attack = new BBMOD_Animation("Attack.bbanim");
+
+	anim_attack = new BBMOD_Animation("Assets/Brute/Attack.bbanim");
+
+	mat_character = undefined;
+
 	anim_current = undefined;
 	animation_player = new BBMOD_AnimationPlayer(character);
 	animation_player.OnEvent = function (_event, _animation) {

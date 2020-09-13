@@ -67,7 +67,7 @@ int ConvertToBBMOD(const char* fin, const char* fout, const BBMODConfig& config)
 	std::ofstream log(GetFilename(fout, "log", ".txt"), std::ios::out);
 
 	Assimp::Importer* importer = new Assimp::Importer();
-	importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
+	//importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 
 	int flags = (0
 		// aiProcessPreset_TargetRealtime_Quality

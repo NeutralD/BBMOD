@@ -15,7 +15,12 @@ BBMOD_Animation* BBMOD_Animation::FromAssimp(aiAnimation* aiAnimation, BBMOD_Mod
 		aiNodeAnim* channel = aiAnimation->mChannels[i];
 
 		BBMOD_AnimationNode* animationNode = new BBMOD_AnimationNode();
-		animationNode->Index = model->FindNodeByName(channel->mNodeName.C_Str(), model->RootNode)->Index;
+		BBMOD_Node* node = model->FindNodeByName(channel->mNodeName.C_Str(), model->RootNode);
+		if (!node)
+		{
+			return nullptr;
+		}
+		animationNode->Index = node->Index;
 		
 		for (size_t j = 0; j < channel->mNumPositionKeys; ++j)
 		{
