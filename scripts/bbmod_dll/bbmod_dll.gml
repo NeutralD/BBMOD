@@ -51,7 +51,7 @@
 
 /// @func BBMOD_DLL([_path])
 /// @desc Loads a DLL which allows you to convert models into BBMOD.
-/// @param {string} [_path] The path to the DLL file. Defaults to "BBMOD/DLL/BBMOD.dll".
+/// @param {string} [_path] The path to the DLL file. Defaults to "BBMOD/BBMOD.dll".
 /// @throws {BBMOD_Error} If the DLL file does not exist.
 /// @example
 /// ```gml
