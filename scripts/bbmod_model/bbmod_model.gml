@@ -60,9 +60,21 @@ function BBMOD_Model(_file) constructor
 	/// @readonly
 	MaterialCount = 0;
 
-	/// @var {string[]} Array of material names.
+	/// @var {string[]} An array of material names.
+	/// @see BBMOD_Model.Materials
+	/// @see BBMOD_Model.get_material
+	/// @see BBMOD_Model.set_material
 	/// @readonly
 	MaterialNames = [];
+
+	/// @var {BBMOD_Material[]} An array of materials. Each entry defaults to
+	/// {@link BBMOD_MATERIAL_DEFAULT} or {@link BBMOD_MATERIAL_DEFAULT_ANIMATED}
+	/// for animated models.
+	/// @see BBMOD_Model.MaterialNames
+	/// @see BBMOD_Model.get_material
+	/// @see BBMOD_Model.set_material
+	/// @see BBMOD_Material
+	Materials = [];
 
 	/// @func from_buffer(_buffer)
 	/// @desc Loads model data from a buffer.
@@ -111,6 +123,10 @@ function BBMOD_Model(_file) constructor
 
 		if (MaterialCount > 0)
 		{
+			var _material_default = (BoneCount > 0)
+				? BBMOD_MATERIAL_DEFAULT_ANIMATED
+				: BBMOD_MATERIAL_DEFAULT;
+			Materials = array_create(MaterialCount, _material_default);
 			var _material_names = array_create(MaterialCount, undefined);
 
 			i  = 0;
@@ -239,6 +255,51 @@ function BBMOD_Model(_file) constructor
 		return _transform;
 	};
 
+	/// @func get_material(_name)
+	/// @desc Retrieves a material by its name.
+	/// @param {string} _name The name of the material.
+	/// @return {BBMOD_Material} The material.
+	/// @throws {BBMOD_Error} If the model doesn't have a material with given name.
+	/// @see BBMOD_Model.Materials
+	/// @see BBMOD_Model.MaterialNames
+	/// @see BBMOD_Model.set_material
+	/// @see BBMOD_Material
+	static get_material = function (_name) {
+		var i = 0;
+		repeat (MaterialCount)
+		{
+			if (MaterialNames[i] == _name)
+			{
+				return Materials[i];
+			}
+			++i;
+		}
+		throw new BBMOD_Error("No such material found!");
+	};
+
+	/// @func set_material(_name, _material)
+	/// @desc Sets a material.
+	/// @param {string} _name The name of the material slot.
+	/// @param {BBMOD_Material} _material The material.
+	/// @throws {BBMOD_Error} If the model doesn't have a material with given name.
+	/// @see BBMOD_Model.Materials
+	/// @see BBMOD_Model.MaterialNames
+	/// @see BBMOD_Model.get_material
+	/// @see BBMOD_Material
+	static set_material = function (_name, _material) {
+		var i = 0;
+		repeat (MaterialCount)
+		{
+			if (MaterialNames[i] == _name)
+			{
+				Materials[@ i] = _material;
+				return;
+			}
+			++i;
+		}
+		throw new BBMOD_Error("No such material found!");
+	};
+
 	/// @func get_vertex_format([_bones[, _ids]])
 	/// @desc Retrieves or creates a vertex format compatible with the model.
 	/// This can be used when creating a {@link BBMOD_StaticBatch}.
@@ -270,7 +331,7 @@ function BBMOD_Model(_file) constructor
 	/// @desc Submits the model for rendering.
 	/// @param {BBMOD_Material[]/undefined} [_materials] An array of materials,
 	/// one for each material slot of the model. If not specified, then
-	/// the default material is used for each slot. Defaults to `undefined`.
+	/// {@link BBMOD_Model.Materials} is used. Defaults to `undefined`.
 	/// @param {real[]/undefined} [_transform] An array of transformation matrices
 	/// (for animated models) or `undefined`.
 	/// @example
@@ -288,17 +349,12 @@ function BBMOD_Model(_file) constructor
 	static render = function () {
 		var _materials = (argument_count > 0) ? argument[0] : undefined;
 		var _transform = (argument_count > 1) ? argument[1] : undefined;
-
-		if (is_undefined(_materials))
-		{
-			_materials = array_create(
-				MaterialCount,
-				is_undefined(_transform)
-					? BBMOD_MATERIAL_DEFAULT
-					: BBMOD_MATERIAL_DEFAULT_ANIMATED);
-		}
-
 		var _render_pass = global.bbmod_render_pass;
+
+		if (_materials == undefined)
+		{
+			_materials = Materials;
+		}
 
 		var i = 0;
 		repeat (array_length(_materials))
