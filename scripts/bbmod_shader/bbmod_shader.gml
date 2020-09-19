@@ -130,5 +130,5 @@ function bbmod_set_ibl_texture(_texture, _texel)
 
 // FIXME: Initial IBL setup
 global.__bbmod_material_current = BBMOD_NONE;
-var _spr_ibl = sprite_add("BBMOD/Skies/SunsetIBL.png", 0, false, true, 0, 0);
+var _spr_ibl = sprite_add("BBMOD/Skies/NoonIBL.png", 0, false, true, 0, 0);
 bbmod_set_ibl_sprite(_spr_ibl, 0);

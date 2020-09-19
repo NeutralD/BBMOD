@@ -154,5 +154,5 @@ if (TEST_ANIMATIONS)
 	animation_player.update();
 }
 
-global.bbmod_camera_exposure += (keyboard_check(vk_add) - keyboard_check(vk_subtract)) * 0.01;
-global.bbmod_camera_exposure = max(global.bbmod_camera_exposure, 0.01);
+global.bbmod_camera_exposure += (keyboard_check(vk_add) - keyboard_check(vk_subtract)) * 0.001;
+global.bbmod_camera_exposure = max(global.bbmod_camera_exposure, 0.001);

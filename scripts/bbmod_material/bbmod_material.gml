@@ -45,7 +45,7 @@ global.__bbmod_material_default_animated = new BBMOD_Material(BBMOD_ShDefaultAni
 global.__bbmod_material_default_batched = new BBMOD_Material(BBMOD_ShDefaultBatched);
 
 // FIXME: Initial IBL setup
-var _spr_sky = sprite_add("BBMOD/Skies/SunsetSky.png", 0, false, true, 0, 0);
+var _spr_sky = sprite_add("BBMOD/Skies/NoonSky.png", 0, false, true, 0, 0);
 var _mat_sky = new BBMOD_Material(BBMOD_ShSky);
 _mat_sky.BaseOpacity = sprite_get_texture(_spr_sky, 0);
 _mat_sky.Culling = cull_noculling;
@@ -82,6 +82,11 @@ function bbmod_material_on_apply_default(_material)
 	if (!_material.Mipmapping)
 	{
 		gpu_set_tex_mip_enable(mip_off);
+	}
+
+	if (!_material.Filtering)
+	{
+		gpu_set_tex_filter(false);
 	}
 
 	_bbmod_shader_set_alpha_test(_shader, _material.AlphaTest);
@@ -152,7 +157,14 @@ function BBMOD_Material(_shader) constructor
 	AlphaTest = 1;
 
 	/// @var {bool} Use `false` to disable mimapping for this material.
+	/// @note Mipmapping needs to be enabled in the first place using `gpu_set_tex_mip_enable`
+	/// for this to have any effect.
 	Mipmapping = true;
+
+	/// @var {bool} Use `false` to disable linear texture filtering for this material.
+	/// @note Texture filtering needs to be enabled in the first place using `gpu_set_tex_filter`
+	/// for this to have any effect.
+	Filtering = true;
 
 	/// @var {ptr} A texture with a base color in the RGB channels and opacity in the
 	/// alpha channel.
