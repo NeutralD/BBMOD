@@ -1,5 +1,5 @@
-/datafiles/Test
-/datafiles_yyc/Test
+/datafiles/*
+!/datafiles/BBMOD
 /docs_build/
 /docs_src/ScriptingAPI/
 Documentation.zip
