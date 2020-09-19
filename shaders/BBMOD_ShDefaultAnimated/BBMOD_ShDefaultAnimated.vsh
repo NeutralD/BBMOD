@@ -1,5 +1,5 @@
 #pragma include("Default_VS.xsh", "glsl")
-#define MAX_BONES 64
+#define MAX_BONES 67
 
 #define in_TangentW in_TextureCoord1
 

@@ -45,7 +45,7 @@ global.__bbmod_material_default_animated = new BBMOD_Material(BBMOD_ShDefaultAni
 global.__bbmod_material_default_batched = new BBMOD_Material(BBMOD_ShDefaultBatched);
 
 // FIXME: Initial IBL setup
-var _spr_sky = sprite_add("BBMOD/Skies/NoonSky.png", 0, false, true, 0, 0);
+var _spr_sky = sprite_add("BBMOD/Skies/SunsetSky.png", 0, false, true, 0, 0);
 var _mat_sky = new BBMOD_Material(BBMOD_ShSky);
 _mat_sky.BaseOpacity = sprite_get_texture(_spr_sky, 0);
 _mat_sky.Culling = cull_noculling;

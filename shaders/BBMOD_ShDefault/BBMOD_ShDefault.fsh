@@ -167,6 +167,42 @@ vec3 xDecodeRGBM(vec4 rgbm)
 	return 6.0 * rgbm.rgb * rgbm.a;
 }
 
+// Source: http://graphicrants.blogspot.com/2009/04/rgbm-color-encoding.html
+
+// M matrix, for encoding
+const mat3 M = mat3(
+	0.2209, 0.3390, 0.4184,
+	0.1138, 0.6780, 0.7319,
+	0.0102, 0.1130, 0.2969);
+
+// Inverse M matrix, for decoding
+const mat3 InverseM = mat3(
+	6.0014, -2.7008, -1.7996,
+	-1.3320, 3.1029,-5.7721,
+	0.3008, -1.0882, 5.6268);
+
+vec4 xEncodeLogLuv(vec3 vRGB)
+{
+	vec4 vResult;
+	vec3 Xp_Y_XYZp = M * vRGB;
+	Xp_Y_XYZp = max(Xp_Y_XYZp, vec3(1e-6, 1e-6, 1e-6));
+	vResult.xy = Xp_Y_XYZp.xy / Xp_Y_XYZp.z;
+	float Le = 2.0 * log2(Xp_Y_XYZp.y) + 127.0;
+	vResult.w = fract(Le);
+	vResult.z = (Le - (floor(vResult.w * 255.0)) / 255.0) / 255.0;
+	return vResult;
+}
+
+vec3 xDecodeLogLuv(vec4 vLogLuv)
+{
+	float Le = vLogLuv.z * 255.0 + vLogLuv.w;
+	vec3 Xp_Y_XYZp;
+	Xp_Y_XYZp.y = exp2((Le - 127.0) / 2.0);
+	Xp_Y_XYZp.z = Xp_Y_XYZp.y / vLogLuv.y;
+	Xp_Y_XYZp.x = vLogLuv.x * Xp_Y_XYZp.z;
+	vec3 vRGB = InverseM * Xp_Y_XYZp;
+	return max(vRGB, vec3(0.0, 0.0, 0.0));
+}
 #define X_GAMMA 2.2
 
 /// @desc Converts gamma space color to linear space.
@@ -196,7 +232,7 @@ vec3 xDiffuseIBL(sampler2D ibl, vec2 texel, vec3 N)
 	uv0.x = (r2 + mix(texel.x, 1.0 - texel.x, uv0.x)) * s;
 	uv0.y = mix(texel.y, 1.0 - texel.y, uv0.y);
 
-	return xGammaToLinear(xDecodeRGBM(texture2D(ibl, uv0)));
+	return xDecodeLogLuv(texture2D(ibl, uv0));
 }
 
 /// @source http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
@@ -220,8 +256,8 @@ vec3 xSpecularIBL(sampler2D ibl, vec2 texel, sampler2D brdf, vec3 f0, float roug
 
 	vec3 specular = f0 * envBRDF.x + envBRDF.y;
 
-	vec3 col0 = xGammaToLinear(xDecodeRGBM(texture2D(ibl, uv0))) * specular;
-	vec3 col1 = xGammaToLinear(xDecodeRGBM(texture2D(ibl, uv1))) * specular;
+	vec3 col0 = xDecodeLogLuv(texture2D(ibl, uv0)) * specular;
+	vec3 col1 = xDecodeLogLuv(texture2D(ibl, uv1)) * specular;
 
 	return mix(col0, col1, rDiff);
 }

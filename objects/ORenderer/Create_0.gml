@@ -1,4 +1,4 @@
-show_debug_overlay(true);
+show_debug_overlay(false);
 
 application_surface_enable(true);
 application_surface_draw_enable(false);
@@ -61,7 +61,7 @@ for (var i = 0; i < BATCH_SIZE; ++i)
 	instance_create_layer(_x, _y, layer, OModel);
 }
 
-#macro TEST_ANIMATIONS false
+#macro TEST_ANIMATIONS true
 
 if (TEST_ANIMATIONS)
 {
