@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/BBMOD/Scripts.yy",
+    "name": "Math",
+    "path": "folders/ThirdParty/CE/Scripts/Math.yy",
   },
   "resourceVersion": "1.0",
-  "name": "bbmod_legacy",
+  "name": "ce_matrix",
   "tags": [],
   "resourceType": "GMScript",
 }

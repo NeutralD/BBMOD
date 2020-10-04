@@ -72,8 +72,6 @@ if (TEST_ANIMATIONS)
 
 	anim_attack = new BBMOD_Animation("Assets/Brute/Attack.bbanim");
 
-	mat_character = undefined;
-
 	anim_current = undefined;
 	animation_player = new BBMOD_AnimationPlayer(character);
 	animation_player.OnEvent = function (_event, _animation) {

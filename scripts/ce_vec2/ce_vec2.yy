@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "CE",
-    "path": "folders/Scripts/BBMOD/ThirdParty/CE.yy",
+    "name": "Math",
+    "path": "folders/ThirdParty/CE/Scripts/Math.yy",
   },
   "resourceVersion": "1.0",
-  "name": "ce_macro",
+  "name": "ce_vec2",
   "tags": [],
   "resourceType": "GMScript",
 }
