@@ -1,6 +1,6 @@
 #ifdef _WINDLL
 
-#include "bbmod.hpp"
+#include <bbmod/bbmod.hpp>
 
 #define GM_EXPORT extern "C" __declspec (dllexport)
 

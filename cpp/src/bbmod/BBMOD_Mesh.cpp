@@ -1,11 +1,12 @@
-#include "BBMOD_Mesh.hpp"
-#include "BBMOD_Model.hpp"
-#include "bbmod.hpp"
-#include "terminal.hpp"
+#include <bbmod/BBMOD_Mesh.hpp>
+#include <bbmod/BBMOD_Model.hpp>
+#include <bbmod/bbmod.hpp>
+#include <terminal.hpp>
+#include <utils.hpp>
+
 #include <map>
 #include <vector>
 #include <string>
-#include "utils.hpp"
 #include <iostream>
 
 /** Encodes color into a single integer as ARGB. */

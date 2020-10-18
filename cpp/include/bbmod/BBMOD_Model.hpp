@@ -1,11 +1,13 @@
 #pragma once
 
+#include <bbmod/BBMOD_VertexFormat.hpp>
+#include <bbmod/BBMOD_Node.hpp>
+#include <bbmod/BBMOD_Bone.hpp>
+#include <bbmod/BBMOD_Mesh.hpp>
+#include <bbmod/bbmod.hpp>
+
 #include <assimp/scene.h>
-#include "BBMOD_VertexFormat.hpp"
-#include "BBMOD_Node.hpp"
-#include "BBMOD_Bone.hpp"
-#include "BBMOD_Mesh.hpp"
-#include "bbmod.hpp"
+
 #include <vector>
 #include <string>
 

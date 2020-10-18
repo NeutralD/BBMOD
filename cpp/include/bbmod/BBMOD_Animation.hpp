@@ -1,10 +1,12 @@
 #pragma once
 
-#include "bbmod.hpp"
-#include "BBMOD_Model.hpp"
+#include <bbmod/bbmod.hpp>
+#include <bbmod/BBMOD_Model.hpp>
+
 #include <assimp/vector3.h>
 #include <assimp/quaternion.h>
 #include <assimp/anim.h>
+
 #include <vector>
 #include <string>
 #include <fstream>

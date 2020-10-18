@@ -1,5 +1,5 @@
-#include "BBMOD_Animation.hpp"
-#include "utils.hpp"
+#include <bbmod/BBMOD_Animation.hpp>
+#include <utils.hpp>
 
 BBMOD_Animation* BBMOD_Animation::FromAssimp(aiAnimation* aiAnimation, BBMOD_Model* model)
 {

@@ -1,5 +1,5 @@
-#include "BBMOD_Node.hpp"
-#include "utils.hpp"
+#include <bbmod/BBMOD_Node.hpp>
+#include <utils.hpp>
 
 bool BBMOD_Node::Save(std::ofstream& file)
 {

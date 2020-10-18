@@ -1,5 +1,5 @@
-#include "BBMOD_VertexFormat.hpp"
-#include "utils.hpp"
+#include <bbmod/BBMOD_VertexFormat.hpp>
+#include <utils.hpp>
 
 bool BBMOD_VertexFormat::Save(std::ofstream& file)
 {

@@ -1,5 +1,6 @@
-#include "BBMOD_Model.hpp"
-#include "utils.hpp"
+#include <bbmod/BBMOD_Model.hpp>
+#include <utils.hpp>
+
 #include <fstream>
 
 static BBMOD_Node* CollectNodes(BBMOD_Model* model, aiNode* nodeCurrent)

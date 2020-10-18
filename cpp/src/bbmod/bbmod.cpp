@@ -1,10 +1,12 @@
-#include "bbmod.hpp"
-#include "terminal.hpp"
-#include "BBMOD_Model.hpp"
-#include "BBMOD_Animation.hpp"
+#include <bbmod/bbmod.hpp>
+#include <bbmod/BBMOD_Model.hpp>
+#include <bbmod/BBMOD_Animation.hpp>
+#include <terminal.hpp>
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
 #include <fstream>
 #include <iostream>
 #include <filesystem>

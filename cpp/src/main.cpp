@@ -1,7 +1,7 @@
 #ifndef _WINDLL
 
-#include "bbmod.hpp"
-#include "terminal.hpp"
+#include <bbmod/bbmod.hpp>
+#include <terminal.hpp>
 #include <iostream>
 #include <filesystem>
 #include <string>

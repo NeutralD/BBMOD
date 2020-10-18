@@ -1,8 +1,10 @@
 #pragma once
 
-#include "BBMOD_VertexFormat.hpp"
+#include <bbmod/BBMOD_VertexFormat.hpp>
+
 #include <assimp/vector2.h>
 #include <assimp/vector3.h>
+
 #include <vector>
 #include <fstream>
 
