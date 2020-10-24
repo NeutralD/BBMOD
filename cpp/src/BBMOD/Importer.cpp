@@ -180,7 +180,7 @@ int ConvertToBBMOD(const char* fin, const char* fout, const SConfig& config)
 		{
 			for (uint32_t i = 0; i < numOfAnimations; ++i)
 			{
-				SAnimation* animation = SAnimation::FromAssimp(scene->mAnimations[i], model);
+				SAnimation* animation = SAnimation::FromAssimp(scene->mAnimations[i], model, config);
 		
 				if (!animation)
 				{

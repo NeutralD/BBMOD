@@ -137,33 +137,6 @@ GM_EXPORT gmreal_t bbmod_dll_set_disable_bone(gmreal_t disable)
 	return BBMOD_SUCCESS;
 }
 
-GM_EXPORT gmreal_t bbmod_dll_set_transform(gmptr_t* matrix)
-{
-	float* m = (float*)matrix;
-
-	gConfig.Transform.a1 = *(m++);
-	gConfig.Transform.a2 = *(m++);
-	gConfig.Transform.a3 = *(m++);
-	gConfig.Transform.a4 = *(m++);
-
-	gConfig.Transform.b1 = *(m++);
-	gConfig.Transform.b2 = *(m++);
-	gConfig.Transform.b3 = *(m++);
-	gConfig.Transform.b4 = *(m++);
-
-	gConfig.Transform.c1 = *(m++);
-	gConfig.Transform.c2 = *(m++);
-	gConfig.Transform.c3 = *(m++);
-	gConfig.Transform.c4 = *(m++);
-
-	gConfig.Transform.d1 = *(m++);
-	gConfig.Transform.d2 = *(m++);
-	gConfig.Transform.d3 = *(m++);
-	gConfig.Transform.d4 = *(m++);
-
-	return BBMOD_SUCCESS;
-}
-
 GM_EXPORT gmreal_t bbmod_dll_convert(gmstring_t fin, gmstring_t fout)
 {
 	return ConvertToBBMOD(fin, fout, gConfig);

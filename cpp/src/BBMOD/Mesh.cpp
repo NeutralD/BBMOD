@@ -47,15 +47,6 @@ static inline float GetBitangentSign(
 	return (dot < 0.0f) ? -1.0f : 1.0f;
 }
 
-static inline aiVector3D Vec4Transform(const aiMatrix4x4& matrix, const aiVector3D& vector, ai_real w)
-{
-	aiVector3D transformed;
-	transformed.x = matrix.a1 * vector.x + matrix.b1 * vector.y + matrix.c1 * vector.z + matrix.d1 * w;
-	transformed.y = matrix.a2 * vector.x + matrix.b2 * vector.y + matrix.c2 * vector.z + matrix.d2 * w;
-	transformed.z = matrix.a3 * vector.x + matrix.b3 * vector.y + matrix.c3 * vector.z + matrix.d3 * w;
-	return transformed;
-}
-
 SMesh* SMesh::FromAssimp(aiMesh* aiMesh, SModel* model, const SConfig& config)
 {
 	SMesh* mesh = new SMesh();
@@ -123,7 +114,7 @@ SMesh* SMesh::FromAssimp(aiMesh* aiMesh, SModel* model, const SConfig& config)
 			vertex->VertexFormat = mesh->VertexFormat;
 
 			// Vertex
-			vertex->Position = Vec4Transform(config.Transform, aiMesh->mVertices[idx], 1.0f);
+			vertex->Position = aiMesh->mVertices[idx];
 
 			// Normal
 			aiVector3D normal;
@@ -136,7 +127,7 @@ SMesh* SMesh::FromAssimp(aiMesh* aiMesh, SModel* model, const SConfig& config)
 				{
 					normal *= -1.0f;
 				}
-				vertex->Normal = Vec4Transform(config.Transform, normal, 0.0f);
+				vertex->Normal = normal;
 			}
 
 			// Texture
@@ -170,10 +161,10 @@ SMesh* SMesh::FromAssimp(aiMesh* aiMesh, SModel* model, const SConfig& config)
 				if (aiMesh->HasTangentsAndBitangents())
 				{
 					// Tangent
-					vertex->Tangent = Vec4Transform(config.Transform, aiMesh->mTangents[idx], 0.0f);
+					vertex->Tangent = aiMesh->mTangents[idx];
 
 					// Bitangent sign
-					aiVector3D bitangent = Vec4Transform(config.Transform, aiMesh->mBitangents[idx], 0.0f);
+					aiVector3D bitangent = aiMesh->mBitangents[idx];
 					vertex->BitangentSign = GetBitangentSign(normal, vertex->Tangent, bitangent);
 				}
 				else

@@ -57,7 +57,7 @@ struct SAnimationNode
 
 struct SAnimation
 {
-	static SAnimation* FromAssimp(aiAnimation* animation, SModel* model);
+	static SAnimation* FromAssimp(aiAnimation* animation, SModel* model, const struct SConfig& config);
 
 	bool Save(std::string path);
 

@@ -58,7 +58,4 @@ struct SConfig
 	 * @see BBMOD_NORMALS_SMOOTH
 	 */
 	size_t GenNormals = BBMOD_NORMALS_SMOOTH;
-
-	/** Global transformation of model and animation data. */
-	aiMatrix4x4 Transform;
 };

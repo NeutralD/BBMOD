@@ -3,7 +3,7 @@
 
 #include <fstream>
 
-static SNode* CollectNodes(SModel* model, aiNode* nodeCurrent)
+static SNode* CollectNodes(SModel* model, aiNode* nodeCurrent, const SConfig& config)
 {
 	SNode* node = new SNode();
 	node->Name = nodeCurrent->mName.C_Str();
@@ -28,7 +28,7 @@ static SNode* CollectNodes(SModel* model, aiNode* nodeCurrent)
 
 	for (size_t i = 0; i < nodeCurrent->mNumChildren; ++i)
 	{
-		node->Children.push_back(CollectNodes(model, nodeCurrent->mChildren[i]));
+		node->Children.push_back(CollectNodes(model, nodeCurrent->mChildren[i], config));
 	}
 
 	return node;
@@ -72,7 +72,7 @@ SModel* SModel::FromAssimp(const aiScene* scene, const SConfig& config)
 						SBone* bone = new SBone();
 						bone->Name = boneName;
 						bone->Index = (float)model->BoneCount++;
-						bone->OffsetMatrix = config.Transform * boneCurrent->mOffsetMatrix;
+						bone->OffsetMatrix = boneCurrent->mOffsetMatrix;
 						model->Skeleton.push_back(bone);
 					}
 				}
@@ -92,11 +92,11 @@ SModel* SModel::FromAssimp(const aiScene* scene, const SConfig& config)
 		model->Meshes.push_back(SMesh::FromAssimp(meshCurrent, model, config));
 	}
 
-	// Inverse transform matrix
-	model->InverseTransformMatrix = (config.Transform * scene->mRootNode->mTransformation).Inverse();
-
 	// Nodes
-	model->RootNode = CollectNodes(model, scene->mRootNode);
+	model->RootNode = CollectNodes(model, scene->mRootNode, config);
+
+	// Inverse transform matrix
+	model->InverseTransformMatrix = model->RootNode->TransformMatrix.Inverse();
 	
 	// Materials
 	for (size_t i = 0; i < scene->mNumMaterials; ++i)

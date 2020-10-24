@@ -1,7 +1,8 @@
 #include <BBMOD/Animation.hpp>
+#include <BBMOD/Config.hpp>
 #include <utils.hpp>
 
-SAnimation* SAnimation::FromAssimp(aiAnimation* aiAnimation, SModel* model)
+SAnimation* SAnimation::FromAssimp(aiAnimation* aiAnimation, SModel* model, const SConfig& config)
 {
 	SAnimation* animation = new SAnimation();
 
