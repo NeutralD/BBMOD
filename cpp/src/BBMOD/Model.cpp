@@ -1,14 +1,14 @@
-#include <bbmod/BBMOD_Model.hpp>
+#include <BBMOD/Model.hpp>
 #include <utils.hpp>
 
 #include <fstream>
 
-static BBMOD_Node* CollectNodes(BBMOD_Model* model, aiNode* nodeCurrent)
+static SNode* CollectNodes(SModel* model, aiNode* nodeCurrent)
 {
-	BBMOD_Node* node = new BBMOD_Node();
+	SNode* node = new SNode();
 	node->Name = nodeCurrent->mName.C_Str();
 
-	if (BBMOD_Bone* bone = model->FindBoneByName(node->Name))
+	if (SBone* bone = model->FindBoneByName(node->Name))
 	{
 		node->Index = (float)bone->Index;
 		node->IsBone = true;
@@ -34,24 +34,23 @@ static BBMOD_Node* CollectNodes(BBMOD_Model* model, aiNode* nodeCurrent)
 	return node;
 }
 
-BBMOD_Model* BBMOD_Model::FromAssimp(const aiScene* scene, const BBMODConfig& config)
+SModel* SModel::FromAssimp(const aiScene* scene, const SConfig& config)
 {
-	BBMOD_Model* model = new BBMOD_Model();
-	model->Scene = scene;
+	SModel* model = new SModel();
 
 	// Resolve vertex format of the model
 	aiMesh* mesh = scene->mMeshes[0];
 
-	BBMOD_VertexFormat* vertexFormat = new BBMOD_VertexFormat();
+	SVertexFormat* vertexFormat = new SVertexFormat();
 	vertexFormat->Vertices = true;
-	vertexFormat->Normals = mesh->HasNormals() && !config.disableNormals;
-	vertexFormat->TextureCoords = mesh->HasTextureCoords(0) && !config.disableTextureCoords;
-	vertexFormat->Colors = mesh->HasVertexColors(0) && !config.disableVertexColors;
-	vertexFormat->TangentW = mesh->HasTangentsAndBitangents() && !(config.disableNormals || config.disableTangentW);
-
+	vertexFormat->Normals = mesh->HasNormals() && !config.DisableNormals;
+	vertexFormat->TextureCoords = mesh->HasTextureCoords(0) && !config.DisableTextureCoords;
+	vertexFormat->Colors = mesh->HasVertexColors(0) && !config.DisableVertexColors;
+	vertexFormat->TangentW = mesh->HasTangentsAndBitangents() && !(config.DisableNormals || config.DisableTangentW);
 	vertexFormat->Bones = false;
+	vertexFormat->Ids = false;
 
-	if (!config.disableBones)
+	if (!config.DisableBones)
 	{
 		for (size_t i = 0; i < scene->mNumMeshes; ++i)
 		{
@@ -70,10 +69,10 @@ BBMOD_Model* BBMOD_Model::FromAssimp(const aiScene* scene, const BBMODConfig& co
 
 					if (model->FindBoneByName(boneName) == nullptr)
 					{
-						BBMOD_Bone* bone = new BBMOD_Bone();
+						SBone* bone = new SBone();
 						bone->Name = boneName;
 						bone->Index = (float)model->BoneCount++;
-						bone->OffsetMatrix = boneCurrent->mOffsetMatrix;
+						bone->OffsetMatrix = config.Transform * boneCurrent->mOffsetMatrix;
 						model->Skeleton.push_back(bone);
 					}
 				}
@@ -90,11 +89,11 @@ BBMOD_Model* BBMOD_Model::FromAssimp(const aiScene* scene, const BBMODConfig& co
 	for (size_t i = 0; i < scene->mNumMeshes; ++i)
 	{
 		aiMesh* meshCurrent = scene->mMeshes[i];
-		model->Meshes.push_back(BBMOD_Mesh::FromAssimp(meshCurrent, model, config));
+		model->Meshes.push_back(SMesh::FromAssimp(meshCurrent, model, config));
 	}
 
 	// Inverse transform matrix
-	model->InverseTransformMatrix = scene->mRootNode->mTransformation.Inverse();
+	model->InverseTransformMatrix = (config.Transform * scene->mRootNode->mTransformation).Inverse();
 
 	// Nodes
 	model->RootNode = CollectNodes(model, scene->mRootNode);
@@ -109,7 +108,47 @@ BBMOD_Model* BBMOD_Model::FromAssimp(const aiScene* scene, const BBMODConfig& co
 	return model;
 }
 
-bool BBMOD_Model::Save(std::string path)
+SBone* SModel::FindBoneByName(std::string name) const
+{
+	for (SBone* bone : Skeleton)
+	{
+		if (bone->Name == name)
+		{
+			return bone;
+		}
+	}
+	return nullptr;
+}
+
+SBone* SModel::FindBoneByIndex(int index) const
+{
+	for (SBone* bone : Skeleton)
+	{
+		if (bone->Index == index)
+		{
+			return bone;
+		}
+	}
+	return nullptr;
+}
+
+SNode* SModel::FindNodeByName(std::string name, SNode* nodeCurrent) const
+{
+	if (nodeCurrent->Name == name)
+	{
+		return nodeCurrent;
+	}
+	for (SNode* child : nodeCurrent->Children)
+	{
+		if (SNode* node = FindNodeByName(name, child))
+		{
+			return node;
+		}
+	}
+	return nullptr;
+}
+
+bool SModel::Save(std::string path)
 {
 	std::ofstream file(path, std::ios::out | std::ios::binary);
 
@@ -129,7 +168,7 @@ bool BBMOD_Model::Save(std::string path)
 	size_t meshCount = Meshes.size();
 	FILE_WRITE_DATA(file, meshCount);
 
-	for (BBMOD_Mesh* mesh : Meshes)
+	for (SMesh* mesh : Meshes)
 	{
 		if (!mesh->Save(file))
 		{
@@ -148,7 +187,7 @@ bool BBMOD_Model::Save(std::string path)
 
 	FILE_WRITE_DATA(file, BoneCount);
 
-	for (BBMOD_Bone* bone : Skeleton)
+	for (SBone* bone : Skeleton)
 	{
 		if (!bone->Save(file))
 		{

@@ -578,7 +578,7 @@ function BBMOD_AnimationPlayer(_model) constructor
 	/// delete animation_player;
 	/// ```
 	static destroy = function () {
-		ds_list_destroy(_animation_player.Animations);
+		ds_list_destroy(Animations);
 	};
 }
 

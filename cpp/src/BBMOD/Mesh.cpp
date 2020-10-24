@@ -1,6 +1,5 @@
-#include <bbmod/BBMOD_Mesh.hpp>
-#include <bbmod/BBMOD_Model.hpp>
-#include <bbmod/bbmod.hpp>
+#include <BBMOD/Mesh.hpp>
+#include <BBMOD/Model.hpp>
 #include <terminal.hpp>
 #include <utils.hpp>
 
@@ -48,9 +47,18 @@ static inline float GetBitangentSign(
 	return (dot < 0.0f) ? -1.0f : 1.0f;
 }
 
-BBMOD_Mesh* BBMOD_Mesh::FromAssimp(aiMesh* aiMesh, BBMOD_Model* model, const BBMODConfig& config)
+static inline aiVector3D Vec4Transform(const aiMatrix4x4& matrix, const aiVector3D& vector, ai_real w)
 {
-	BBMOD_Mesh* mesh = new BBMOD_Mesh();
+	aiVector3D transformed;
+	transformed.x = matrix.a1 * vector.x + matrix.b1 * vector.y + matrix.c1 * vector.z + matrix.d1 * w;
+	transformed.y = matrix.a2 * vector.x + matrix.b2 * vector.y + matrix.c2 * vector.z + matrix.d2 * w;
+	transformed.z = matrix.a3 * vector.x + matrix.b3 * vector.y + matrix.c3 * vector.z + matrix.d3 * w;
+	return transformed;
+}
+
+SMesh* SMesh::FromAssimp(aiMesh* aiMesh, SModel* model, const SConfig& config)
+{
+	SMesh* mesh = new SMesh();
 
 	mesh->VertexFormat = model->VertexFormat;
 	mesh->MaterialIndex = aiMesh->mMaterialIndex;
@@ -107,15 +115,15 @@ BBMOD_Mesh* BBMOD_Mesh::FromAssimp(aiMesh* aiMesh, BBMOD_Model* model, const BBM
 			exit(EXIT_FAILURE);
 		}
 
-		for (unsigned int f = config.invertWinding ? face.mNumIndices - 1 : 0; f >= 0 && f < face.mNumIndices; f += config.invertWinding ? -1 : +1)
+		for (unsigned int f = config.InvertWinding ? face.mNumIndices - 1 : 0; f >= 0 && f < face.mNumIndices; f += config.InvertWinding ? -1 : +1)
 		{
 			uint32_t idx = face.mIndices[f];
 
-			BBMOD_Vertex* vertex = new BBMOD_Vertex();
+			SVertex* vertex = new SVertex();
 			vertex->VertexFormat = mesh->VertexFormat;
 
 			// Vertex
-			vertex->Position = aiVector3D(aiMesh->mVertices[idx]);
+			vertex->Position = Vec4Transform(config.Transform, aiMesh->mVertices[idx], 1.0f);
 
 			// Normal
 			aiVector3D normal;
@@ -124,11 +132,11 @@ BBMOD_Mesh* BBMOD_Mesh::FromAssimp(aiMesh* aiMesh, BBMOD_Model* model, const BBM
 				normal = aiMesh->HasNormals()
 					? aiVector3D(aiMesh->mNormals[idx])
 					: aiVector3D();
-				if (config.flipNormals)
+				if (config.FlipNormals)
 				{
 					normal *= -1.0f;
 				}
-				vertex->Normal = normal;
+				vertex->Normal = Vec4Transform(config.Transform, normal, 0.0f);
 			}
 
 			// Texture
@@ -137,11 +145,11 @@ BBMOD_Mesh* BBMOD_Mesh::FromAssimp(aiMesh* aiMesh, BBMOD_Model* model, const BBM
 				aiVector3D texture = aiMesh->HasTextureCoords(0)
 					? aiMesh->mTextureCoords[0][idx]
 					: aiVector3D();
-				if (config.flipTextureHorizontally)
+				if (config.FlipTextureHorizontally)
 				{
 					texture.x = 1.0f - texture.x;
 				}
-				if (config.flipTextureVertically)
+				if (config.FlipTextureVertically)
 				{
 					texture.y = 1.0f - texture.y;
 				}
@@ -162,10 +170,10 @@ BBMOD_Mesh* BBMOD_Mesh::FromAssimp(aiMesh* aiMesh, BBMOD_Model* model, const BBM
 				if (aiMesh->HasTangentsAndBitangents())
 				{
 					// Tangent
-					vertex->Tangent = aiVector3D(aiMesh->mTangents[idx]);
+					vertex->Tangent = Vec4Transform(config.Transform, aiMesh->mTangents[idx], 0.0f);
 
 					// Bitangent sign
-					aiVector3D& bitangent = aiMesh->mBitangents[idx];
+					aiVector3D bitangent = Vec4Transform(config.Transform, aiMesh->mBitangents[idx], 0.0f);
 					vertex->BitangentSign = GetBitangentSign(normal, vertex->Tangent, bitangent);
 				}
 				else
@@ -205,9 +213,9 @@ BBMOD_Mesh* BBMOD_Mesh::FromAssimp(aiMesh* aiMesh, BBMOD_Model* model, const BBM
 	return mesh;
 }
 
-bool BBMOD_Vertex::Save(std::ofstream& file)
+bool SVertex::Save(std::ofstream& file)
 {
-	BBMOD_VertexFormat* vertexFormat = VertexFormat;
+	SVertexFormat* vertexFormat = VertexFormat;
 
 	if (vertexFormat->Vertices)
 	{
@@ -257,15 +265,14 @@ bool BBMOD_Vertex::Save(std::ofstream& file)
 	return true;
 }
 
-
-bool BBMOD_Mesh::Save(std::ofstream& file)
+bool SMesh::Save(std::ofstream& file)
 {
 	FILE_WRITE_DATA(file, MaterialIndex);
 
 	size_t vertexCount = Data.size();
 	FILE_WRITE_DATA(file, vertexCount);
 
-	for (BBMOD_Vertex* vertex : Data)
+	for (SVertex* vertex : Data)
 	{
 		if (!vertex->Save(file))
 		{

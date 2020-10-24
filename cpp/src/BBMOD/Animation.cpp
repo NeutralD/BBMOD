@@ -1,9 +1,9 @@
-#include <bbmod/BBMOD_Animation.hpp>
+#include <BBMOD/Animation.hpp>
 #include <utils.hpp>
 
-BBMOD_Animation* BBMOD_Animation::FromAssimp(aiAnimation* aiAnimation, BBMOD_Model* model)
+SAnimation* SAnimation::FromAssimp(aiAnimation* aiAnimation, SModel* model)
 {
-	BBMOD_Animation* animation = new BBMOD_Animation();
+	SAnimation* animation = new SAnimation();
 
 	animation->Model = model;
 	animation->Name = aiAnimation->mName.C_Str();
@@ -14,8 +14,8 @@ BBMOD_Animation* BBMOD_Animation::FromAssimp(aiAnimation* aiAnimation, BBMOD_Mod
 	{
 		aiNodeAnim* channel = aiAnimation->mChannels[i];
 
-		BBMOD_AnimationNode* animationNode = new BBMOD_AnimationNode();
-		BBMOD_Node* node = model->FindNodeByName(channel->mNodeName.C_Str(), model->RootNode);
+		SAnimationNode* animationNode = new SAnimationNode();
+		SNode* node = model->FindNodeByName(channel->mNodeName.C_Str(), model->RootNode);
 		if (!node)
 		{
 			return nullptr;
@@ -25,7 +25,7 @@ BBMOD_Animation* BBMOD_Animation::FromAssimp(aiAnimation* aiAnimation, BBMOD_Mod
 		for (size_t j = 0; j < channel->mNumPositionKeys; ++j)
 		{
 			aiVectorKey& key = channel->mPositionKeys[j];
-			BBMOD_PositionKey* positionKey = new BBMOD_PositionKey();
+			SPositionKey* positionKey = new SPositionKey();
 			positionKey->Time = key.mTime;
 			positionKey->Position = key.mValue;
 			animationNode->PositionKeys.push_back(positionKey);
@@ -34,7 +34,7 @@ BBMOD_Animation* BBMOD_Animation::FromAssimp(aiAnimation* aiAnimation, BBMOD_Mod
 		for (size_t j = 0; j < channel->mNumRotationKeys; ++j)
 		{
 			aiQuatKey& key = channel->mRotationKeys[j];
-			BBMOD_RotationKey* rotationKey = new BBMOD_RotationKey();
+			SRotationKey* rotationKey = new SRotationKey();
 			rotationKey->Time = key.mTime;
 			rotationKey->Rotation = key.mValue;
 			animationNode->RotationKeys.push_back(rotationKey);
@@ -46,15 +46,15 @@ BBMOD_Animation* BBMOD_Animation::FromAssimp(aiAnimation* aiAnimation, BBMOD_Mod
 	return animation;
 }
 
-bool BBMOD_AnimationKey::Save(std::ofstream& file)
+bool SAnimationKey::Save(std::ofstream& file)
 {
 	FILE_WRITE_DATA(file, Time);
 	return true;
 }
 
-bool BBMOD_PositionKey::Save(std::ofstream& file)
+bool SPositionKey::Save(std::ofstream& file)
 {
-	if (!BBMOD_AnimationKey::Save(file))
+	if (!SAnimationKey::Save(file))
 	{
 		return false;
 	}
@@ -62,9 +62,9 @@ bool BBMOD_PositionKey::Save(std::ofstream& file)
 	return true;
 }
 
-bool BBMOD_RotationKey::Save(std::ofstream& file)
+bool SRotationKey::Save(std::ofstream& file)
 {
-	if (!BBMOD_AnimationKey::Save(file))
+	if (!SAnimationKey::Save(file))
 	{
 		return false;
 	}
@@ -72,14 +72,14 @@ bool BBMOD_RotationKey::Save(std::ofstream& file)
 	return true;
 }
 
-bool BBMOD_AnimationNode::Save(std::ofstream& file)
+bool SAnimationNode::Save(std::ofstream& file)
 {
 	FILE_WRITE_DATA(file, Index);
 
 	size_t positionKeyCount = PositionKeys.size();
 	FILE_WRITE_DATA(file, positionKeyCount);
 
-	for (BBMOD_PositionKey* key : PositionKeys)
+	for (SPositionKey* key : PositionKeys)
 	{
 		if (!key->Save(file))
 		{
@@ -90,7 +90,7 @@ bool BBMOD_AnimationNode::Save(std::ofstream& file)
 	size_t rotationKeyCount = RotationKeys.size();
 	FILE_WRITE_DATA(file, rotationKeyCount);
 
-	for (BBMOD_RotationKey* key : RotationKeys)
+	for (SRotationKey* key : RotationKeys)
 	{
 		if (!key->Save(file))
 		{
@@ -102,7 +102,7 @@ bool BBMOD_AnimationNode::Save(std::ofstream& file)
 }
 
 
-bool BBMOD_Animation::Save(std::string path)
+bool SAnimation::Save(std::string path)
 {
 	std::ofstream file(path, std::ios::out | std::ios::binary);
 
@@ -122,7 +122,7 @@ bool BBMOD_Animation::Save(std::string path)
 	size_t affectedNodeCount = AnimationNodes.size();
 	FILE_WRITE_DATA(file, affectedNodeCount);
 
-	for (BBMOD_AnimationNode* animationNode : AnimationNodes)
+	for (SAnimationNode* animationNode : AnimationNodes)
 	{
 		if (!animationNode->Save(file))
 		{

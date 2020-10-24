@@ -116,6 +116,8 @@ function BBMOD_DLL() constructor
 
 	dll_set_disable_bone = external_define(path, "bbmod_dll_set_disable_bone", dll_cdecl, ty_real, 1, ty_real);
 
+	dll_set_transform = external_define(path, "bbmod_dll_set_transform", dll_cdecl, ty_real, 1, ty_string);
+
 	dll_convert = external_define(path, "bbmod_dll_convert", dll_cdecl, ty_real, 2, ty_string, ty_string);
 
 	/// @func convert(_fin, _fout)
@@ -396,6 +398,19 @@ function BBMOD_DLL() constructor
 	static set_left_handed = function (_left_handed) {
 		gml_pragma("forceinline");
 		var _retval = external_call(dll_set_left_handed, _left_handed);
+		if (_retval != BBMOD_DLL_SUCCESS)
+		{
+			throw new BBMOD_Error();
+		}
+	};
+
+	/// @func set_transform(_transform)
+	/// @desc Sets the transformation of the model.
+	/// @param {CE_NativeArray} _transform The transformation.
+	/// @throws {BBMOD_Error} If the operation fails.
+	static set_transform = function (_transform) {
+		gml_pragma("forceinline");
+		var _retval = external_call(dll_set_transform, _transform.get_ptr());
 		if (_retval != BBMOD_DLL_SUCCESS)
 		{
 			throw new BBMOD_Error();

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <bbmod/BBMOD_VertexFormat.hpp>
+#include <BBMOD/Config.hpp>
+#include <BBMOD/VertexFormat.hpp>
 
 #include <assimp/vector2.h>
 #include <assimp/vector3.h>
@@ -8,9 +9,9 @@
 #include <vector>
 #include <fstream>
 
-struct BBMOD_Vertex
+struct SVertex
 {
-	BBMOD_Vertex()
+	SVertex()
 		: Position(aiVector3D())
 		, Normal(aiVector3D())
 		, Texture(aiVector2D())
@@ -20,7 +21,7 @@ struct BBMOD_Vertex
 	
 	bool Save(std::ofstream& file);
 
-	BBMOD_VertexFormat* VertexFormat = nullptr;
+	SVertexFormat* VertexFormat = nullptr;
 	aiVector3D Position;
 	aiVector3D Normal;
 	aiVector2D Texture;
@@ -32,15 +33,15 @@ struct BBMOD_Vertex
 	int Id = 0;
 };
 
-struct BBMOD_Mesh
+struct SMesh
 {
-	static BBMOD_Mesh* FromAssimp(struct aiMesh* mesh, struct BBMOD_Model* model, const struct BBMODConfig& config);
+	static SMesh* FromAssimp(struct aiMesh* mesh, struct SModel* model, const struct SConfig& config);
 
 	bool Save(std::ofstream& file);
 
-	BBMOD_VertexFormat* VertexFormat = nullptr;
+	SVertexFormat* VertexFormat = nullptr;
 
 	size_t MaterialIndex = 0;
 
-	std::vector<BBMOD_Vertex*> Data;
+	std::vector<SVertex*> Data;
 };

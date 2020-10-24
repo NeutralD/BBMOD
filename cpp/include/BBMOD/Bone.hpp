@@ -1,10 +1,11 @@
 #pragma once
 
 #include <assimp/matrix4x4.h>
+
 #include <string>
 #include <fstream>
 
-struct BBMOD_Bone
+struct SBone
 {
 	bool Save(std::ofstream& file);
 

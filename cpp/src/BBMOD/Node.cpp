@@ -1,7 +1,7 @@
-#include <bbmod/BBMOD_Node.hpp>
+#include <BBMOD/Node.hpp>
 #include <utils.hpp>
 
-bool BBMOD_Node::Save(std::ofstream& file)
+bool SNode::Save(std::ofstream& file)
 {
 	const char* str = Name.c_str();
 	file.write(str, strlen(str) + 1);
@@ -21,7 +21,7 @@ bool BBMOD_Node::Save(std::ofstream& file)
 	size_t childCount = Children.size();
 	FILE_WRITE_DATA(file, childCount);
 	
-	for (BBMOD_Node* child : Children)
+	for (SNode* child : Children)
 	{
 		if (!child->Save(file))
 		{

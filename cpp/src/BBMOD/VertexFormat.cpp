@@ -1,7 +1,7 @@
-#include <bbmod/BBMOD_VertexFormat.hpp>
+#include <BBMOD/VertexFormat.hpp>
 #include <utils.hpp>
 
-bool BBMOD_VertexFormat::Save(std::ofstream& file)
+bool SVertexFormat::Save(std::ofstream& file)
 {
 	FILE_WRITE_DATA(file, Vertices);
 	FILE_WRITE_DATA(file, Normals);

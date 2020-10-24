@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-struct BBMOD_VertexFormat
+struct SVertexFormat
 {
 	bool Save(std::ofstream& file);
 

@@ -6,7 +6,7 @@
 #include <vector>
 #include <fstream>
 
-struct BBMOD_Node
+struct SNode
 {
 	bool Save(std::ofstream& file);
 
@@ -20,5 +20,5 @@ struct BBMOD_Node
 
 	std::vector<size_t> Meshes;
 
-	std::vector<BBMOD_Node*> Children;
+	std::vector<SNode*> Children;
 };

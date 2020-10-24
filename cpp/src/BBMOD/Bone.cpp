@@ -1,7 +1,7 @@
-#include <bbmod/BBMOD_Bone.hpp>
+#include <BBMOD/Bone.hpp>
 #include <utils.hpp>
 
-bool BBMOD_Bone::Save(std::ofstream& file)
+bool SBone::Save(std::ofstream& file)
 {
 	FILE_WRITE_DATA(file, Index);
 	FILE_WRITE_MATRIX(file, OffsetMatrix);
