@@ -25,7 +25,7 @@ mouse_last_x = _mouse_x;
 mouse_last_y = _mouse_y;
 
 // Move around
-var _move_speed = keyboard_check(vk_shift) ? 1 : 0.25;
+var _move_speed = keyboard_check(vk_shift) ? 4 : 1;
 
 if (keyboard_check(ord("W")))
 {
@@ -68,91 +68,10 @@ var _up = ce_vec3_clone(_to);
 ce_vec3_cross(_up, _right);
 ce_vec3_add(_to, _from);
 
-camera_set_view_mat(camera, matrix_build_lookat(
-	_from[0], _from[1], _from[2],
-	_to[0], _to[1], _to[2],
-	_up[0], _up[1], _up[2]));
-
-bbmod_set_camera_position(_from[0], _from[1], _from[2]);
+renderer.CameraFrom = _from;
+renderer.CameraTo = _to;
+renderer.CameraUp = _up;
 
 // Controls
-var _strength = keyboard_check(vk_shift) ? 0.1 : 0.01;
-var _diff = (keyboard_check(vk_add) - keyboard_check(vk_subtract)) * _strength;
-
-global.bbmod_camera_exposure += _diff;
-global.bbmod_camera_exposure = max(global.bbmod_camera_exposure, 0.1);
-
-// Batching test
-if (keyboard_check_pressed(vk_space))
-{
-	if (++mode_current >= EMode.SIZE)
-	{
-		mode_current = 0;
-		if (!freezed)
-		{
-			mod_sphere.freeze();
-			freezed = true;
-		}
-	}
-}
-
-switch (mode_current)
-{
-case EMode.Normal:
-	break;
-
-case EMode.Static:
-	var _model = model[mode_current];
-	if (_model == BBMOD_NONE)
-	{
-		_model = new BBMOD_StaticBatch(model[EMode.Normal].get_vertex_format(false));
-		_model.start();
-		with (OModel)
-		{
-			_model.add(other.model[EMode.Normal],
-				matrix_build(x, y, z, 0, 0, image_angle, image_xscale, image_xscale, image_xscale));
-		}
-		_model.finish();
-		_model.freeze();
-		model[mode_current] = _model;
-	}
-	break;
-
-case EMode.Dynamic:
-	var _model = model[mode_current];
-	if (_model == BBMOD_NONE)
-	{
-		_model = new BBMOD_DynamicBatch(model[EMode.Normal], BATCH_SIZE);
-		_model.freeze();
-		model[mode_current] = _model;
-	}
-	break;
-}
-
-if (TEST_ANIMATIONS)
-{
-	var _animation = anim_current;
-	var _loop = false;
-
-	if (_animation != anim_attack && mouse_check_button_pressed(mb_left))
-	{
-		_animation = anim_attack;
-	}
-
-	if (_animation == undefined)
-	{
-		_animation = anim_idle;
-		_loop = true;
-	}
-
-	if (anim_current != _animation)
-	{
-		animation_player.play(_animation, _loop);
-		anim_current = _animation;
-	}
-
-	animation_player.update();
-}
-
 global.bbmod_camera_exposure += (keyboard_check(vk_add) - keyboard_check(vk_subtract)) * 0.001;
 global.bbmod_camera_exposure = max(global.bbmod_camera_exposure, 0.001);

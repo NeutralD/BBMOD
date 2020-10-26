@@ -190,6 +190,7 @@ function BBMOD_Model(_file) constructor
 	/// @func freeze()
 	/// @desc Freezes all vertex buffers used by the model. This should make its
 	/// rendering faster, but it disables creating new batches of the model.
+	/// @return {BBMOD_Model} Returns `self` to allow method chaining.
 	static freeze = function () {
 		gml_pragma("forceinline");
 		var i = 0;
@@ -197,6 +198,7 @@ function BBMOD_Model(_file) constructor
 		{
 			_bbmod_mesh_freeze(Meshes[i++]);
 		}
+		return self;
 	};
 
 	/// @func find_node_id(_node_name)
@@ -282,6 +284,7 @@ function BBMOD_Model(_file) constructor
 	/// @param {string} _name The name of the material slot.
 	/// @param {BBMOD_Material} _material The material.
 	/// @throws {BBMOD_Error} If the model doesn't have a material with given name.
+	/// @return {BBMOD_Model} Returns `self` to allow method chaining.
 	/// @see BBMOD_Model.Materials
 	/// @see BBMOD_Model.MaterialNames
 	/// @see BBMOD_Model.get_material
@@ -293,7 +296,7 @@ function BBMOD_Model(_file) constructor
 			if (MaterialNames[i] == _name)
 			{
 				Materials[@ i] = _material;
-				return;
+				return self;
 			}
 			++i;
 		}
@@ -334,6 +337,7 @@ function BBMOD_Model(_file) constructor
 	/// {@link BBMOD_Model.Materials} is used. Defaults to `undefined`.
 	/// @param {real[]/undefined} [_transform] An array of transformation matrices
 	/// (for animated models) or `undefined`.
+	/// @return {BBMOD_Model} Returns `self` to allow method chaining.
 	/// @example
 	/// ```gml
 	/// bbmod_material_reset();
@@ -369,6 +373,7 @@ function BBMOD_Model(_file) constructor
 		}
 
 		bbmod_node_render(self, RootNode, _materials, _transform);
+		return self;
 	};
 
 	/// @func destroy()
