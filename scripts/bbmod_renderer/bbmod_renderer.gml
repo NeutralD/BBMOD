@@ -5,30 +5,16 @@ function BBMOD_Renderer() constructor
 	/// @readonly
 	Objects = ds_list_create();
 
-	/// @var {camera}
+	/// @var {BBMOD_Camera}
 	/// @readonly
-	Camera = camera_create();
-
-	/// @var {array}
-	CameraFrom = ce_vec3_create(0);
-
-	/// @var {array}
-	CameraTo = ce_vec3_create(1, 0, 0);
-
-	/// @var {array}
-	CameraUp = ce_vec3_create(0, 0, 1);
+	Camera = new BBMOD_Camera();
 
 	/// @var {real}
-	Fov = 60;
+	Supersampling = 2;
 
-	/// @var {real}
-	AspectRatio = 16 / 9;
-
-	/// @var {real}
-	ZNear = 0.1;
-
-	/// @var {real}
-	ZFar = 8192;
+	application_surface_enable(true);
+	application_surface_draw_enable(false);
+	gpu_set_tex_filter(true);
 
 	/// @func add_object(_object)
 	/// @param {object} _object
@@ -42,22 +28,28 @@ function BBMOD_Renderer() constructor
 	/// @func update()
 	/// @return {BBMOD_Renderer} Returns `self` to allow method chaining.
 	static update = function () {
+		var _window_width = max(window_get_width(), 1);
+		var _window_height = max(window_get_height(), 1);
+
+		var _surface_width = max(_window_width * Supersampling, 1);
+		var _surface_height = max(_window_height * Supersampling, 1);
+
+		if (surface_get_width(application_surface) != _surface_width
+			|| surface_get_height(application_surface) != _surface_height)
+		{
+			surface_resize(application_surface, _surface_width, _surface_height);
+		}
+
+		Camera.update();
+
 		return self;
 	};
 
 	/// @func render()
 	/// @return {BBMOD_Renderer} Returns `self` to allow method chaining.
 	static render = function () {
-		camera_set_view_mat(Camera, matrix_build_lookat(
-			CameraFrom[0], CameraFrom[1], CameraFrom[2],
-			CameraTo[0], CameraTo[1], CameraTo[2],
-			CameraUp[0], CameraUp[1], CameraUp[2]));
-
-		camera_set_proj_mat(Camera, matrix_build_projection_perspective_fov(
-			-Fov, -AspectRatio, ZNear, ZFar));
-
-		camera_apply(Camera);
-		bbmod_set_camera_position(CameraFrom[0], CameraFrom[1], CameraFrom[2]);
+		Camera.apply();
+		global.bbmod_camera_position = Camera.Position;
 
 		gpu_push_state();
 		gpu_set_ztestenable(true);
@@ -82,6 +74,14 @@ function BBMOD_Renderer() constructor
 
 		gpu_pop_state();
 
+		return self;
+	};
+
+	/// @func present()
+	/// @return {BBMOD_Renderer} Returns `self` to allow method chaining.
+	static present = function () {
+		gml_pragma("forceinline");
+		draw_surface_stretched(application_surface, 0, 0, window_get_width(), window_get_height());
 		return self;
 	};
 }

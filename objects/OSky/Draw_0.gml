@@ -1,5 +1,5 @@
 var _renderer = instance_find(ORenderer, 0);
-var _camera_position = _renderer.renderer.CameraFrom;
+var _camera_position = _renderer.renderer.Camera.Position;
 
 matrix_set(matrix_world, matrix_build(
 	_camera_position[0],
