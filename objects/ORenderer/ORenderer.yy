@@ -4,7 +4,10 @@
   "visible": true,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "OObject3D",
+    "path": "objects/OObject3D/OObject3D.yy",
+  },
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,

@@ -1,6 +1,6 @@
-show_debug_overlay(false);
+event_inherited();
 
-z = 0;
+show_debug_overlay(false);
 
 renderer = new BBMOD_Renderer()
 	.add_object(OSky)

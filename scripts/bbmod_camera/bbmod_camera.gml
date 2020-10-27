@@ -53,6 +53,9 @@ function BBMOD_Camera() constructor
 	/// @var {real}
 	Zoom = 0;
 
+	/// @func set_mouse_look(_enable)
+	/// @param {bool} _enable
+	/// @return {BBMOD_Camera} Returns `self` to allow method chaining.
 	static set_mouse_look = function (_enable) {
 		if (_enable)
 		{
