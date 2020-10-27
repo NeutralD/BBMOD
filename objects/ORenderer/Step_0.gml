@@ -1,7 +1,7 @@
 var _camera = renderer.Camera;
 
 // Mouselook
-_camera.MouseLook = mouse_check_button(mb_right);
+_camera.set_mouse_look(mouse_check_button(mb_right));
 window_set_cursor(_camera.MouseLook ? cr_none : cr_arrow);
 
 // Move around
@@ -31,11 +31,11 @@ else if (keyboard_check(ord("D")))
 
 z += (keyboard_check(ord("E")) - keyboard_check(ord("Q"))) * _move_speed;
 
-_camera.Zoom += (mouse_wheel_down() - mouse_wheel_up());
+_camera.Zoom += (mouse_wheel_down() - mouse_wheel_up()) * 2;
 _camera.Zoom = max(_camera.Zoom, 0);
 
 // Controls
-global.bbmod_camera_exposure += (keyboard_check(vk_add) - keyboard_check(vk_subtract)) * 0.001;
-global.bbmod_camera_exposure = max(global.bbmod_camera_exposure, 0.001);
+_camera.Exposure += (keyboard_check(vk_add) - keyboard_check(vk_subtract)) * 0.01;
+_camera.Exposure = max(_camera.Exposure, 0.01);
 
 renderer.update();

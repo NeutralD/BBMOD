@@ -5,6 +5,9 @@ function BBMOD_Camera() constructor
 	/// @readonly
 	Camera = camera_create();
 
+	/// @var {real}
+	Exposure = 1;
+
 	/// @var {real[]} The camera's positon.
 	Position = ce_vec3_create(0);
 
@@ -32,7 +35,12 @@ function BBMOD_Camera() constructor
 	FollowObject = undefined;
 
 	/// @var {bool} True to enable mouselook.
+	/// @private
 	MouseLook = true;
+
+	/// @var {real[]/undefined}
+	/// @private
+	MouseLockAt = undefined;
 
 	/// @var {real}
 	/// @readonly
@@ -45,20 +53,37 @@ function BBMOD_Camera() constructor
 	/// @var {real}
 	Zoom = 0;
 
+	static set_mouse_look = function (_enable) {
+		if (_enable)
+		{
+			if (MouseLockAt == undefined)
+			{
+				MouseLockAt = [
+					window_mouse_get_x(),
+					window_mouse_get_y(),
+				];
+			}
+		}
+		else
+		{
+			MouseLockAt = undefined;
+		}
+		MouseLook = _enable;
+		return self;
+	};
+
 	/// @func update()
 	/// @return {BBMOD_Camera} Returns `self` to allow method chaining.
 	static update = function () {
 		if (MouseLook)
 		{
-			var _window_center_x = window_get_width() * 0.5;
-			var _window_center_y = window_get_height() * 0.5;
 			var _mouse_x = window_mouse_get_x();
 			var _mouse_y = window_mouse_get_y();
 			var _mouse_sensitivity = 0.8;
-			Direction += (_window_center_x - _mouse_x) * _mouse_sensitivity;
-			DirectionUp += (_window_center_y - _mouse_y) * _mouse_sensitivity;
+			Direction += (MouseLockAt[0] - _mouse_x) * _mouse_sensitivity;
+			DirectionUp += (MouseLockAt[1] - _mouse_y) * _mouse_sensitivity;
 			DirectionUp = clamp(DirectionUp, -89, 89);
-			window_mouse_set(_window_center_x, _window_center_y);
+			window_mouse_set(MouseLockAt[0], MouseLockAt[1]);
 		}
 
 		if (Zoom <= 0)
@@ -127,6 +152,7 @@ function BBMOD_Camera() constructor
 	static apply = function () {
 		gml_pragma("forceinline");
 		camera_apply(Camera);
+		global.bbmod_camera_exposure = Exposure;
 		return self;
 	};
 }
