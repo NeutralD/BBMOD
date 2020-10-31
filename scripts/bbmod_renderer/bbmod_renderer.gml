@@ -10,7 +10,7 @@ function BBMOD_Renderer() constructor
 	Camera = new BBMOD_Camera();
 
 	/// @var {real}
-	Supersampling = 2;
+	Supersampling = 1;
 
 	application_surface_enable(true);
 	application_surface_draw_enable(false);

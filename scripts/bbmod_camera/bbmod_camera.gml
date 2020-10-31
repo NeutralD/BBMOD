@@ -125,13 +125,17 @@ function BBMOD_Camera() constructor
 			]);
 		}
 
-		camera_set_view_mat(Camera, matrix_build_lookat(
+		var _view = matrix_build_lookat(
 			Position[0], Position[1], Position[2],
 			Target[0], Target[1], Target[2],
-			Up[0], Up[1], Up[2]));
+			Up[0], Up[1], Up[2]);
 
-		camera_set_proj_mat(Camera, matrix_build_projection_perspective_fov(
-			-Fov, -AspectRatio, ZNear, ZFar));
+		camera_set_view_mat(Camera, _view);
+
+		var _proj = matrix_build_projection_perspective_fov(
+			-Fov, -AspectRatio, ZNear, ZFar);
+
+		camera_set_proj_mat(Camera, _proj);
 
 		return self;
 	};
@@ -145,7 +149,7 @@ function BBMOD_Camera() constructor
 
 	/// @func getproj_mat()
 	/// @return {real[]}
-	static get_view_mat = function () {
+	static get_proj_mat = function () {
 		gml_pragma("forceinline");
 		return camera_get_proj_mat(Camera);
 	};
@@ -155,6 +159,7 @@ function BBMOD_Camera() constructor
 	static apply = function () {
 		gml_pragma("forceinline");
 		camera_apply(Camera);
+		array_copy(global.bbmod_camera_position, 0, Position, 0, 3);
 		global.bbmod_camera_exposure = Exposure;
 		return self;
 	};

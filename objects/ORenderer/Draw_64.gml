@@ -1,0 +1,1 @@
+draw_text(64, 64, string(fps) + " (" + string(fps_real) + ")");

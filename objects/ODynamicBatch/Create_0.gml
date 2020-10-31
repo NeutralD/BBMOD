@@ -1,0 +1,1 @@
+dynamic_batch = new BBMOD_DynamicBatch(ORenderer.mod_sphere, 64).freeze();

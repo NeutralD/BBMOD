@@ -50,9 +50,11 @@ function BBMOD_DynamicBatch(_model, _size) constructor
 
 	/// @func freeze()
 	/// @desc Freezes the dynamic batch. This makes it render faster.
+	/// @return {BBMOD_DynamicBatch} Returns `self` to allow method chaining.
 	static freeze = function () {
 		gml_pragma("forceinline");
 		vertex_freeze(VertexBuffer);
+		return self;
 	};
 
 	/// @func render(_material, _data)
@@ -132,21 +134,29 @@ function BBMOD_DynamicBatch(_model, _size) constructor
 		var _data_size = Size * 8;
 		var _data_empty = array_create(_data_size, 0);
 		var _data = array_create(_data_size, 0)
-		repeat (ceil(instance_number(_object) / Size))
+
+		var _index = 0;
+		with (_object)
 		{
-			array_copy(_data, 0, _data_empty, 0, _data_size);
-			var _index = 0;
-			repeat (Size)
-			{
-				var _instance = instance_find(_object, _find++);
-				if (_instance == noone)
-				{
-					break;
-				}
-				_index += method(_instance, _fn)(_data, _index);
-			}
-			render(_material, _data);
+			_index += method(id, _fn)(_data, _index);
 		}
+		render(_material, _data);
+
+		//repeat (ceil(instance_number(_object) / Size))
+		//{
+		//	array_copy(_data, 0, _data_empty, 0, _data_size);
+		//	var _index = 0;
+		//	repeat (Size)
+		//	{
+		//		var _instance = instance_find(_object, _find++);
+		//		if (_instance == noone)
+		//		{
+		//			break;
+		//		}
+		//		_index += method(_instance, _fn)(_data, _index);
+		//	}
+		//	render(_material, _data);
+		//}
 	};
 
 	/// @func destroy()
