@@ -1,4 +1,4 @@
-/// @func BBMOD_DynamicBatch(_model, _size)
+ /// @func BBMOD_DynamicBatch(_model, _size)
 ///
 /// @desc A dynamic batch is a structure that allows you to render multiple
 /// instances of a single model at once, each with its own position, scale and
@@ -135,28 +135,21 @@ function BBMOD_DynamicBatch(_model, _size) constructor
 		var _data_empty = array_create(_data_size, 0);
 		var _data = array_create(_data_size, 0)
 
-		var _index = 0;
-		with (_object)
+		repeat (ceil(instance_number(_object) / Size))
 		{
-			_index += method(id, _fn)(_data, _index);
+			array_copy(_data, 0, _data_empty, 0, _data_size);
+			var _index = 0;
+			repeat (Size)
+			{
+				var _instance = instance_find(_object, _find++);
+				if (_instance == noone)
+				{
+					break;
+				}
+				_index += method(_instance, _fn)(_data, _index);
+			}
+			render(_material, _data);
 		}
-		render(_material, _data);
-
-		//repeat (ceil(instance_number(_object) / Size))
-		//{
-		//	array_copy(_data, 0, _data_empty, 0, _data_size);
-		//	var _index = 0;
-		//	repeat (Size)
-		//	{
-		//		var _instance = instance_find(_object, _find++);
-		//		if (_instance == noone)
-		//		{
-		//			break;
-		//		}
-		//		_index += method(_instance, _fn)(_data, _index);
-		//	}
-		//	render(_material, _data);
-		//}
 	};
 
 	/// @func destroy()

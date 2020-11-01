@@ -47,9 +47,9 @@ vec3 xChromaticAberration(
 
 void main()
 {
-	vec2 vec         = 0.5 - v_vTexCoord;
-	vec3 distortion  = vec3(-u_vTexel.x, 0.0, u_vTexel.x) * u_fDistortion * min(length(vec) / 0.5, 1.0);
-	vec3 base        = xChromaticAberration(gm_BaseTexture, v_vTexCoord, normalize(vec), distortion);
+	vec2 vec = 0.5 - v_vTexCoord;
+	vec3 distortion = vec3(-u_vTexel.x, 0.0, u_vTexel.x) * u_fDistortion * min(length(vec) / 0.5, 1.0);
+	vec3 base = xChromaticAberration(gm_BaseTexture, v_vTexCoord, normalize(vec), distortion);
 	gl_FragColor.rgb = xColorGrade(base, u_texLut, u_fLutIndex);
-	gl_FragColor.a   = 1.0;
+	gl_FragColor.a = 1.0;
 }

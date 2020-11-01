@@ -1,5 +1,7 @@
 var _camera = renderer.Camera;
 
+_camera.AspectRatio = window_get_width() / window_get_height();
+
 // Mouselook
 _camera.set_mouse_look(mouse_check_button(mb_right));
 window_set_cursor(_camera.MouseLook ? cr_none : cr_arrow);
