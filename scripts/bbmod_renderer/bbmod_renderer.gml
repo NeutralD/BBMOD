@@ -81,14 +81,14 @@ function BBMOD_Renderer() constructor
 		gml_pragma("forceinline");
 		var _window_width = window_get_width();
 		var _window_height = window_get_height();
-		var _shader = BBMOD_ShPostProcess;
+		/*var _shader = BBMOD_ShPostProcess;
 		shader_set(_shader);
 		texture_set_stage(shader_get_sampler_index(_shader, "u_texLut"), sprite_get_texture(BBMOD_SprColorGrading, 0));
 		shader_set_uniform_f(shader_get_uniform(_shader, "u_fLutIndex"), ColorGrading);
 		shader_set_uniform_f(shader_get_uniform(_shader, "u_vTexel"), 1 / _window_width, 1 / _window_height);
-		shader_set_uniform_f(shader_get_uniform(_shader, "u_fDistortion"), 3);
+		shader_set_uniform_f(shader_get_uniform(_shader, "u_fDistortion"), 3);*/
 		draw_surface_stretched(application_surface, 0, 0, _window_width, _window_height);
-		shader_reset();
+		//shader_reset();
 		return self;
 	};
 }
