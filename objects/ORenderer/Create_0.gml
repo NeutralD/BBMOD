@@ -20,4 +20,4 @@ else if (os_type == os_android)
 
 renderer.Camera.FollowObject = id;
 
-mod_sphere = new BBMOD_Model("BBMOD/Models/Sphere.bbmod").freeze();
+mod_sphere = new BBMOD_Model("BBMOD/Models/Sphere.bbmod");

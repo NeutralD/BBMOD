@@ -38,44 +38,25 @@ vec2 xVec3ToEquirectangularUv(vec3 dir)
 }
 // include("EquirectangularMapping.xsh")
 
-#pragma include("LogLUV.xsh", "glsl")
-// Source: http://graphicrants.blogspot.com/2009/04/rgbm-color-encoding.html
-
-const mat3 xMatrixLogLuvEncode = mat3(
-	0.2209, 0.3390, 0.4184,
-	0.1138, 0.6780, 0.7319,
-	0.0102, 0.1130, 0.2969);
-
-const mat3 xMatrixLogLuvDecode = mat3(
-	6.0014, -2.7008, -1.7996,
-	-1.3320, 3.1029, -5.7721,
-	0.3008, -1.0882, 5.6268);
-
-/// @desc Encodes RGB color to LogLUV.
-vec4 xEncodeLogLuv(vec3 vRGB)
+#pragma include("RGBM.xsh", "glsl")
+/// @note Input color should be in gamma space.
+/// @source https://graphicrants.blogspot.cz/2009/04/rgbm-color-encoding.html
+vec4 xEncodeRGBM(vec3 color)
 {
-	vec4 vResult;
-	vec3 Xp_Y_XYZp = xMatrixLogLuvEncode * vRGB;
-	Xp_Y_XYZp = max(Xp_Y_XYZp, vec3(1e-6, 1e-6, 1e-6));
-	vResult.xy = Xp_Y_XYZp.xy / Xp_Y_XYZp.z;
-	float Le = 2.0 * log2(Xp_Y_XYZp.y) + 127.0;
-	vResult.w = fract(Le);
-	vResult.z = (Le - (floor(vResult.w * 255.0)) / 255.0) / 255.0;
-	return vResult;
+	vec4 rgbm;
+	color *= 1.0 / 6.0;
+	rgbm.a = clamp(max(max(color.r, color.g), max(color.b, 0.000001)), 0.0, 1.0);
+	rgbm.a = ceil(rgbm.a * 255.0) / 255.0;
+	rgbm.rgb = color / rgbm.a;
+	return rgbm;
 }
 
-/// @desc Decodes RGB color from LogLUV.
-vec3 xDecodeLogLuv(vec4 vLogLuv)
+/// @source https://graphicrants.blogspot.cz/2009/04/rgbm-color-encoding.html
+vec3 xDecodeRGBM(vec4 rgbm)
 {
-	float Le = vLogLuv.z * 255.0 + vLogLuv.w;
-	vec3 Xp_Y_XYZp;
-	Xp_Y_XYZp.y = exp2((Le - 127.0) / 2.0);
-	Xp_Y_XYZp.z = Xp_Y_XYZp.y / vLogLuv.y;
-	Xp_Y_XYZp.x = vLogLuv.x * Xp_Y_XYZp.z;
-	vec3 vRGB = xMatrixLogLuvDecode * Xp_Y_XYZp;
-	return max(vRGB, vec3(0.0, 0.0, 0.0));
+	return 6.0 * rgbm.rgb * rgbm.a;
 }
-// include("LogLUV.xsh")
+// include("RGBM.xsh")
 
 #pragma include("Color.xsh", "glsl")
 #define X_GAMMA 2.2
@@ -101,7 +82,7 @@ float xLuminance(vec3 rgb)
 
 void main()
 {
-	gl_FragColor.rgb = xDecodeLogLuv(texture2D(gm_BaseTexture, xVec3ToEquirectangularUv(v_vNormal)));
+	gl_FragColor.rgb = xGammaToLinear(xDecodeRGBM(texture2D(gm_BaseTexture, xVec3ToEquirectangularUv(v_vNormal))));
 	gl_FragColor.rgb = vec3(1.0) - exp(-gl_FragColor.rgb * u_fExposure);
 	gl_FragColor.rgb = xLinearToGamma(gl_FragColor.rgb);
 	gl_FragColor.a = 1.0;
