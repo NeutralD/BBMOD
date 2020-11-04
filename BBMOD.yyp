@@ -34,6 +34,7 @@
     {"id":{"name":"ODynamicBatch","path":"objects/ODynamicBatch/ODynamicBatch.yy",},"order":5,},
     {"id":{"name":"BBMOD_SprColorGrading","path":"sprites/BBMOD_SprColorGrading/BBMOD_SprColorGrading.yy",},"order":2,},
     {"id":{"name":"BBMOD_ShPostProcess","path":"shaders/BBMOD_ShPostProcess/BBMOD_ShPostProcess.yy",},"order":5,},
+    {"id":{"name":"OStaticBatch","path":"objects/OStaticBatch/OStaticBatch.yy",},"order":6,},
     {"id":{"name":"OSky","path":"objects/OSky/OSky.yy",},"order":3,},
     {"id":{"name":"ce_matrix","path":"scripts/ce_matrix/ce_matrix.yy",},"order":4,},
     {"id":{"name":"bbmod_animation","path":"scripts/bbmod_animation/bbmod_animation.yy",},"order":0,},
