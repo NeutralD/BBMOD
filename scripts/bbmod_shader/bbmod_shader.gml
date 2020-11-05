@@ -55,12 +55,12 @@ function _bbmod_shader_set_exposure(_shader)
 function _bbmod_shader_set_ibl(_shader, _texture, _texel)
 {
 	var _ibl = shader_get_sampler_index(_shader, "u_texIBL");
-	texture_set_stage(_ibl, _texture);
 	gpu_set_tex_mip_enable_ext(_ibl, mip_off);
+	texture_set_stage(_ibl, _texture);
 
 	var _brdf = shader_get_sampler_index(_shader, "u_texBRDF");
-	texture_set_stage(_brdf, sprite_get_texture(BBMOD_SprEnvBRDF, 0));
 	gpu_set_tex_mip_enable_ext(_brdf, mip_off);
+	texture_set_stage(_brdf, sprite_get_texture(BBMOD_SprEnvBRDF, 0));
 
 	shader_set_uniform_f(shader_get_uniform(_shader, "u_vIBLTexel"),
 		_texel, _texel);

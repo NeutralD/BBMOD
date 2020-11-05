@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"OCharacter","path":"objects/OCharacter/OCharacter.yy",},"order":7,},
     {"id":{"name":"bbmod_vertex_format","path":"scripts/bbmod_vertex_format/bbmod_vertex_format.yy",},"order":4,},
     {"id":{"name":"bbmod_position_key","path":"scripts/bbmod_position_key/bbmod_position_key.yy",},"order":5,},
     {"id":{"name":"ce_surface_utils","path":"scripts/ce_surface_utils/ce_surface_utils.yy",},"order":0,},
@@ -621,6 +622,15 @@
     {"CopyToMask":-1,"filePath":"datafiles/BBMOD","resourceVersion":"1.0","name":"LICENSE","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/BBMOD","resourceVersion":"1.0","name":"BBMOD.exe","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/BBMOD","resourceVersion":"1.0","name":"BBMOD.dll","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/BBMOD/Models","resourceVersion":"1.0","name":"Sphere.bbmod","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/BBMOD/Skies","resourceVersion":"1.0","name":"NoonIBL.png","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/BBMOD/Skies","resourceVersion":"1.0","name":"NoonSky.png","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/BBMOD","resourceVersion":"1.0","name":"assimp-vc140-mt.dll","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/BBMOD","resourceVersion":"1.0","name":"BBMOD.exe","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/BBMOD","resourceVersion":"1.0","name":"LICENSE","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/BBMOD","resourceVersion":"1.0","name":"BBMOD.dll","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/Assets","resourceVersion":"1.0","name":"Idle.bbanim","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/Assets","resourceVersion":"1.0","name":"Character.bbmod","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.0.529",

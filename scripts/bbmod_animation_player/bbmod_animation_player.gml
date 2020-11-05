@@ -98,6 +98,7 @@ function BBMOD_AnimationPlayer(_model) constructor
 	/// @desc Calculates skeleton's current transformation matrices.
 	/// @param {BBMOD_AnimationInstance} _animation_instance An animation instance.
 	/// @param {real} _animation_time The current animation time.
+	/// @return {BBMOD_AnimationPlayer} Returns `self` to allow method chaining.
 	/// @private
 	static animate = function (_animation_instance, _animation_time) {
 		//var _t = get_timer();
@@ -376,6 +377,8 @@ function BBMOD_AnimationPlayer(_model) constructor
 		}
 
 		//show_debug_message(get_timer() - _t);
+
+		return self;
 	}
 
 	/// @func update()

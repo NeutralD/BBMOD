@@ -10,7 +10,7 @@ function BBMOD_Renderer() constructor
 	Camera = new BBMOD_Camera();
 
 	/// @var {real}
-	Supersampling = 1;
+	RenderScale = 1;
 
 	/// @var {uint}
 	ColorGrading = 0;
@@ -33,8 +33,8 @@ function BBMOD_Renderer() constructor
 	static update = function () {
 		var _window_width = max(window_get_width(), 1);
 		var _window_height = max(window_get_height(), 1);
-		var _surface_width = max(_window_width * Supersampling, 1);
-		var _surface_height = max(_window_height * Supersampling, 1);
+		var _surface_width = max(_window_width * RenderScale, 1);
+		var _surface_height = max(_window_height * RenderScale, 1);
 
 		ce_surface_check(application_surface, _surface_width, _surface_height);
 

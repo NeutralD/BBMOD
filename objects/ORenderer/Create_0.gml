@@ -4,6 +4,7 @@ show_debug_overlay(false);
 display_set_gui_maximize(1, 1);
 
 renderer = new BBMOD_Renderer()
+	.add_object(OCharacter)
 	//.add_object(OModel)
 	.add_object(ODynamicBatch)
 	//.add_object(OStaticBatch)
@@ -12,13 +13,18 @@ renderer = new BBMOD_Renderer()
 
 if (os_type == os_windows)
 {
-	renderer.Supersampling = 2;
+	renderer.RenderScale = 2;
 }
 else if (os_type == os_android)
 {
-	renderer.Supersampling = 0.45;
+	renderer.RenderScale = 0.5;
+	room_speed = 30;
 }
 
 renderer.Camera.FollowObject = id;
 
 mod_sphere = new BBMOD_Model("BBMOD/Models/Sphere.bbmod");
+
+mod_character = new BBMOD_Model("Assets/Character.bbmod");
+
+anim_idle = new BBMOD_Animation("Assets/Idle.bbanim");

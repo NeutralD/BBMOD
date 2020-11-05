@@ -1,0 +1,1 @@
+animation_player.update();

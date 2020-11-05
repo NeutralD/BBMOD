@@ -396,6 +396,7 @@ function BBMOD_Model(_file) constructor
 	/// @func to_dynamic_batch(_model, _dynamic_batch)
 	/// @param {BBMOD_Model} _model
 	/// @param {BBMOD_DynamicBatch} _dynamic_batch
+	/// @return {BBMOD_DynamicBatch} Returns `self` to allow method chaining.
 	/// @private
 	function to_dynamic_batch(_dynamic_batch)
 	{
@@ -405,12 +406,14 @@ function BBMOD_Model(_file) constructor
 		{
 			_bbmod_mesh_to_dynamic_batch(Meshes[i++], _dynamic_batch);
 		}
+		return self;
 	}
 
 	/// @func to_static_batch(_model, _static_batch, _transform)
 	/// @param {BBMOD_Model} _model
 	/// @param {BBMOD_StaticBatch} _static_batch
 	/// @param {matrix} _transform
+	/// @return {BBMOD_DynamicBatch} Returns `self` to allow method chaining.
 	/// @private
 	function to_static_batch(_static_batch, _transform)
 	{
@@ -420,6 +423,7 @@ function BBMOD_Model(_file) constructor
 		{
 			_bbmod_mesh_to_static_batch(self, Meshes[i++], _static_batch, _transform);
 		}
+		return self;
 	}
 
 	if (_file != undefined)
